@@ -27,17 +27,37 @@
             </ul>
             
             <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
                 <li>
-                    <a class="btn btn-link" href="#">Login</a>
-                    <a class="btn btn-link" href="#">Sign Up</a>
+                    <a class="btn btn-link" href="#">({{ user.username }})</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
                 </li>
+                {% else %}
+                <li>
+                    <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Username" name="username" >
+                            <input type="password" class="form-control" placeholder="Password" name="psw" >
+                            <button class="btn btn-primary" type="submit">Login</button>
+                            <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                        </div>
+                    </form>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
 
-    <h1>
-    This is the index page body
-    </h1>
+    
+    {% if message %}
+    <div class="alert alert-warning"> <!--Style the message paragraph with .alert and .alert-warning class -->
+        {{ message }}
+    </div>
+    {% else %}
+        <h1>Index Page Text </h1>
+    {% endif %}
+
     <!--Add a dealer table here -->
 
     <div class="container">
