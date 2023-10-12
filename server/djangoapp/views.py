@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 # from .models import related models
-# from .restapis import related methods
+from .restapis import get_dealers_from_cf
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -82,16 +82,25 @@ def registration_request(request):
 
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
+#def get_dealerships(request):
+#    context = {}
+#    if request.method == "GET":
+#        external_api_url = "https://faimpessoa-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get" 
+#                           # https://faimpessoa-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get
+#        dealershipsdata = requests.get(external_api_url)
+#        data = json.loads(dealershipsdata.text)
+#        context['dealerships'] = data
+#        return render(request, 'djangoapp/index.html', context)
 def get_dealerships(request):
-    context = {}
     if request.method == "GET":
-        external_api_url = "https://faimpessoa-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get" 
-                           # https://faimpessoa-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get
-        dealershipsdata = requests.get(external_api_url)
-        data = json.loads(dealershipsdata.text)
-        context['dealerships'] = data
-        return render(request, 'djangoapp/index.html', context)
-        
+        url = "https://faimpessoa-3000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/dealer-get"
+        # Get dealers from the URL
+        dealerships = get_dealers_from_cf(url)
+        # Concat all dealer's short name
+        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+        # Return a list of dealer short name
+        return HttpResponse(dealer_names)
+       
 
 
 
