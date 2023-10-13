@@ -85,15 +85,16 @@ def registration_request(request):
 #def get_dealerships(request):
 #    context = {}
 #    if request.method == "GET":
-#        external_api_url = "https://faimpessoa-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get" 
+#        external_api_url = "https://faimpessoa-3000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get" 
 #                           # https://faimpessoa-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get
 #        dealershipsdata = requests.get(external_api_url)
+#        print("called")
 #        data = json.loads(dealershipsdata.text)
 #        context['dealerships'] = data
 #        return render(request, 'djangoapp/index.html', context)
 def get_dealerships(request):
     if request.method == "GET":
-        url = "https://faimpessoa-3000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/dealer-get"
+        url = "https://faimpessoa-3000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
         # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
         # Concat all dealer's short name

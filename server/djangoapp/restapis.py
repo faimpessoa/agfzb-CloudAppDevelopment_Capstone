@@ -22,6 +22,7 @@ def get_request(url, **kwargs):
     status_code = response.status_code
     print("With status {} ".format(status_code))
     json_data = json.loads(response.text)
+    #print(json_data)
     return json_data
 
 # Create a `post_request` to make HTTP POST requests
@@ -38,9 +39,8 @@ def get_dealers_from_cf(url, **kwargs):
     json_result = get_request(url)
     if json_result:
         # Get the row list in JSON as dealers
-        dealers = json_result['rows']
         # For each dealer object
-        for dealer in dealers:
+        for dealer in json_result:
             # Get its content in `doc` object
             dealer_doc = dealer
             # Create a CarDealer object with values in `doc` object
