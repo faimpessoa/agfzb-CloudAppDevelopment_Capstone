@@ -59,7 +59,7 @@
     {% endif %}
 
     <!--Add a dealer table here -->
-    <table class="table">
+    <table class="table" id="table" data-filter-control="true">
         <thead>
           <tr>
             <th scope="col">ID</th>
@@ -67,7 +67,7 @@
             <th scope="col">City</th>
             <th scope="col">Address</th>
             <th scope="col">Zip</th>
-            <th scope="col">State</th>
+            <th data-filter-control="select">State</th>
           </tr>
         </thead>
         <tbody>
@@ -79,11 +79,12 @@
             <td>{{ dealer.city }}</td>
             <td>{{ dealer.address }}</td>
             <td>{{ dealer.zip }}</td>
-            <td>{{ dealer.state }}</td>
+            <td>{{ dealer.st }}</td>
           </tr>
         {% endfor %}
         </tbody>
       </table>
+      
     
 
     <div class="container">
@@ -98,5 +99,9 @@
 
 
     </body>
-
+    <script>
+        $(function() {
+          $('#table').bootstrapTable()
+        })
+      </script>
 </html>
