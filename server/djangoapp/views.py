@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
-# from .models import related models
+from .models import CarMake, CarModel
 from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -126,17 +126,25 @@ def get_dealer_details(request, dealer_id):
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
     result = "Not Authenticated"
+    context = {}
+    if request.method == "GET":
+        context['cars'] = CarModel.objects.filter(dealer=dealer_id)
+    return render(request, 'djangoapp/add_review.html', context)
+
     if request.method == "POST":
         if request.user.is_authenticated():
             review["id"] = 111
-            review['name'] = "MyReviewName"
+            review['name'] = user.name
             review['dealership'] = dealer_id 
-            review['review'] = "Awsome service. Very happy!" 
-            review['purchase'] = False
-            review['purchase_date'] = datetime.utcnow().isoformat()
-            review['car_make'] = "MyCarMake"
-            review['car_model'] = "MyCarModel"
-            review['car_year'] = 1098
+            review['review'] = request.POST["content"]
+            review['purchase'] = request.POST["purchasecheck"]
+            review['purchase_date'] = request.POST["purchasedate"]
+            selected_car = request.POST['car']
+            selcar_components = selected_car.split('-')
+            sel_carmake = selcar_components[0]
+            review['car_make'] = selcar_components[1]
+            review['car_model'] = selcar_components[0]
+            review['car_year'] = selcar_components[2]
             json_payload = {}
             json_payload["review"] = review
             url = "https://faimpessoa-5000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"
@@ -144,4 +152,4 @@ def add_review(request, dealer_id):
     else:
         result = "You must POST"
     
-    return HttpResponse(result)
+    return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
