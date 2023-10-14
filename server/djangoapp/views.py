@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 # from .models import related models
-from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf
+from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -117,6 +117,24 @@ def get_dealer_details(request, dealer_id):
         return HttpResponse(review_texts)
 
 # Create a `add_review` view to submit a review
-# def add_review(request, dealer_id):
-# ...
-
+def add_review(request, dealer_id):
+    result = "Not Authenticated"
+    if request.method == "POST":
+        if request.user.is_authenticated():
+            review["id"] = 111
+            review['name'] = "MyReviewName"
+            review['dealership'] = dealer_id 
+            review['review'] = "Awsome service. Very happy!" 
+            review['purchase'] = False
+            review['purchase_date'] = datetime.utcnow().isoformat()
+            review['car_make'] = "MyCarMake"
+            review['car_model'] = "MyCarModel"
+            review['car_year'] = 1098
+            json_payload = {}
+            json_payload["review"] = review
+            url = "https://faimpessoa-5000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"
+            result = post_request(url, json_payload)
+    else:
+        result = "You must POST"
+    
+    return HttpResponse(result)
