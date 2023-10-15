@@ -41,8 +41,9 @@ def get_request(url, **kwargs):
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
 def post_request(url, payload, **kwargs):
-    print(kwargs)
-    print("GET from {} ".format(url))
+    print("POST to {} ".format(url))
+    print(f"Payload: {payload}")
+    print(f"Args: {kwargs}")
     api_key = ""
     if "apikey" in kwargs:
         api_key = kwargs["apikey"]
@@ -57,7 +58,9 @@ def post_request(url, payload, **kwargs):
     else:
         try:
             # Call get method of requests library with URL and parameters
+            print("Posting...")
             response = requests.post(url, params=kwargs, headers={'Content-Type': 'application/json'}, json=payload)
+            print("Posting... done.")
         except:
             # If any error occurs
             print("Network exception occurred")

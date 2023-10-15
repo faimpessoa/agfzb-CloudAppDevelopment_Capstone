@@ -133,25 +133,28 @@ def add_review(request, dealer_id):
         context['dealerName'] = "TBD"
         return render(request, 'djangoapp/add_review.html', context)
 
+##'content': ['asdsa'], 'purchasecheck': ['on'], 'car': ['2'], 'purchasedate': ['02/10/2021']}
     if request.method == "POST":
         if request.user.is_authenticated:
-            print(request.POST)    
-            #review["id"] = 111
-            #review['name'] = user.name
-            #review['dealership'] = dealer_id 
-            #review['review'] = request.POST["content"]
-            #review['purchase'] = request.POST["purchasecheck"]
-            #review['purchase_date'] = request.POST["purchasedate"]
-            #selected_car = request.POST['car']
-            #selcar_components = selected_car.split('-')
-            #sel_carmake = selcar_components[0]
-            #review['car_make'] = selcar_components[1]
-            #review['car_model'] = selcar_components[0]
-            #review['car_year'] = selcar_components[2]
-            #json_payload = {}
-            #json_payload["review"] = review
-            #url = "https://faimpessoa-5000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"
-            #result = post_request(url, json_payload)
+            print(request.POST)
+            review = {}    
+            review["id"] = dealer_id
+            review['name'] = request.user.username
+            review['dealership'] = dealer_id
+            review['review'] = request.POST["content"]
+            if "purchasecheck" in request.POST and request.POST["purchasecheck"] == "on":
+                review['purchase'] = True
+            else:
+                review['purchase'] = False
+            review['purchase_date'] = datetime.strptime(request.POST["purchasedate"], '%m/%d/%Y').isoformat()
+            selected_car = CarModel.objects.get(pk=request.POST['car'])
+            review['car_make'] = selected_car.make.name
+            review['car_model'] = selected_car.name
+            review['car_year'] = selected_car.year.strftime("%Y")
+            json_payload = {}
+            json_payload["review"] = review
+            url = "https://faimpessoa-5000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"
+            result = post_request(url, json_payload)
     else:
         result = "You must POST"
     
