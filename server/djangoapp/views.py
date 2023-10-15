@@ -131,26 +131,27 @@ def add_review(request, dealer_id):
         context['cars'] = CarModel.objects.filter(dealer=dealer_id)
         context['dealerID'] = dealer_id
         context['dealerName'] = "TBD"
-    return render(request, 'djangoapp/add_review.html', context)
+        return render(request, 'djangoapp/add_review.html', context)
 
     if request.method == "POST":
-        if request.user.is_authenticated():
-            review["id"] = 111
-            review['name'] = user.name
-            review['dealership'] = dealer_id 
-            review['review'] = request.POST["content"]
-            review['purchase'] = request.POST["purchasecheck"]
-            review['purchase_date'] = request.POST["purchasedate"]
-            selected_car = request.POST['car']
-            selcar_components = selected_car.split('-')
-            sel_carmake = selcar_components[0]
-            review['car_make'] = selcar_components[1]
-            review['car_model'] = selcar_components[0]
-            review['car_year'] = selcar_components[2]
-            json_payload = {}
-            json_payload["review"] = review
-            url = "https://faimpessoa-5000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"
-            result = post_request(url, json_payload)
+        if request.user.is_authenticated:
+            print(request.POST)    
+            #review["id"] = 111
+            #review['name'] = user.name
+            #review['dealership'] = dealer_id 
+            #review['review'] = request.POST["content"]
+            #review['purchase'] = request.POST["purchasecheck"]
+            #review['purchase_date'] = request.POST["purchasedate"]
+            #selected_car = request.POST['car']
+            #selcar_components = selected_car.split('-')
+            #sel_carmake = selcar_components[0]
+            #review['car_make'] = selcar_components[1]
+            #review['car_model'] = selcar_components[0]
+            #review['car_year'] = selcar_components[2]
+            #json_payload = {}
+            #json_payload["review"] = review
+            #url = "https://faimpessoa-5000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"
+            #result = post_request(url, json_payload)
     else:
         result = "You must POST"
     
