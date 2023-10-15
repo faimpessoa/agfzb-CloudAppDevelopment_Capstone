@@ -12,7 +12,7 @@
 </head>
     <body>
     <!--Add review form here -->
-    <h3>Add a review about {{dealerName}} {{dealerID}} Car Dealership </h3>
+    <h3>Add a review about {{dealerShortName}} Car Dealership </h3>
     <form action="{% url 'djangoapp:add_review' dealerID %}" method="post">
         {% csrf_token %}
         <div>

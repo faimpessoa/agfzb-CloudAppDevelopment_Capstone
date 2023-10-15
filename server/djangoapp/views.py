@@ -135,9 +135,17 @@ def add_review(request, dealer_id):
     result = "Not Authenticated"
     context = {}
     if request.method == "GET":
+        url = "https://faimpessoa-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
+        # Get dealers from the URL
+        dealerships = get_dealers_from_cf(url)
+        for dealer in dealerships:
+            if dealer.id == dealer_id:
+                context['dealerName'] = dealer.full_name
+                context['dealerShortName'] = dealer.short_name
+        
         context['cars'] = CarModel.objects.filter(dealer=dealer_id)
         context['dealerID'] = dealer_id
-        context['dealerName'] = "TBD"
+        
         return render(request, 'djangoapp/add_review.html', context)
 
 ##'content': ['asdsa'], 'purchasecheck': ['on'], 'car': ['2'], 'purchasedate': ['02/10/2021']}
