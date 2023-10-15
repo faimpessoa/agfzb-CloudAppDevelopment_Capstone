@@ -111,13 +111,20 @@ def get_dealerships(request):
 def get_dealer_details(request, dealer_id):
     context = {}
     if request.method == "GET":
+        url = "https://faimpessoa-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
+        # Get dealers from the URL
+        dealerships = get_dealers_from_cf(url)
+        for dealer in dealerships:
+            if dealer.id == dealer_id:
+                context['dealerName'] = dealer.full_name
+                context['dealerShortName'] = dealer.short_name
+        
         url = "https://faimpessoa-5000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/get_reviews"
         # Get dealers from the URL
         dealership_reviews = get_dealer_reviews_from_cf(url, id=dealer_id)
         context['reviews'] = dealership_reviews
         context['dealerID'] = dealer_id
-        if len(dealership_reviews) > 0:
-            context['dealerName'] = dealership_reviews[0].name
+        
         # Concat all dealer's short name
         #review_texts = ' '.join([rev.review for rev in dealership_reviews])
         # Return a list of dealer short name
